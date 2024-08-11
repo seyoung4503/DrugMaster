@@ -10,7 +10,11 @@ public class MainController {
     @GetMapping("/sbb")
     @ResponseBody
     public String index() {
-//        System.out.println("Hello world!");
         return "index!";
+    }
+
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/phamacistOpinion/list";
     }
 }

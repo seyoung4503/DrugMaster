@@ -24,7 +24,6 @@ public class PhamacistOpinion {
 
     private LocalDateTime createDate;
 
-    // @Todo : userId Relation 넣기
     @OneToOne
     private Member member;
 }
