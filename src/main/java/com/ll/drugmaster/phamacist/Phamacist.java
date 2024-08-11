@@ -1,19 +1,27 @@
-package drug;
+package com.ll.drugmaster.phamacist;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-public class Drug {
+@Entity
+public class Phamacist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long phamId;
+
+    private String phamName;
+
+    @Email(message = "유효한 양식 필요")
+    private String phamEmail;
+
+    private String password;
 
 
 

@@ -1,9 +1,9 @@
-package phamacistOpinion;
+package com.ll.drugmaster.phamacistOpinion;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import user.User;
+import com.ll.drugmaster.member.Member;
 
 import java.time.LocalDateTime;
 
@@ -14,9 +14,7 @@ public class PhamacistOpinion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long PhamOpinion_id;
-
-
+    private Long PhamOpinionId;
 
     @Column(length = 200)
     private String subject;
@@ -28,5 +26,5 @@ public class PhamacistOpinion {
 
     // @Todo : userId Relation 넣기
     @OneToOne
-    private User user;
+    private Member member;
 }

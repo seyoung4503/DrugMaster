@@ -1,6 +1,6 @@
-package user;
+package com.ll.drugmaster.member;
 
-import phamacistOpinion.PhamacistOpinion;
+import com.ll.drugmaster.phamacistOpinion.PhamacistOpinion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -9,21 +9,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
-    private String userName;
+    private String memberName;
 
-    private Integer userAge;
+    private Integer memberAge;
 
     @Email(message = "이메일을 확인해주세요")
-    private String userEmail;
+    private String memberEmail;
+
+    private String password;
 
     // 의사 소견
-    @OneToOne(mappedBy = "User")
+    @OneToOne(mappedBy = "member")
     private PhamacistOpinion phamacistOpinion;
 
 
