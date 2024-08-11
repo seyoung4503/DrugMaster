@@ -1,0 +1,22 @@
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>이름</th>
+    <th>나이</th>
+    <th>이메일</th>
+    <th>비밀번호</th>
+    <th>상담일지</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="member : ${memberList}">
+    <td th:text="${member.memberId}"></td>
+    <td th:text="${member.memberName}"></td>
+    <td th:text="${member.memberAge}"></td>
+    <td th:text="${member.memberEmail}"></td>
+    <td th:text="${member.password}"></td>
+    <td th:text="${member.phamacistOpinion}"></td>
+  </tr>
+  </tbody>
+</table>
