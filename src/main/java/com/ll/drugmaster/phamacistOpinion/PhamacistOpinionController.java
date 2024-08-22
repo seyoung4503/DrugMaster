@@ -11,13 +11,11 @@ import java.util.List;
 @Controller
 public class PhamacistOpinionController {
 
-    private final PhamacistOpinionRepository phamacistOpinionRepository;
-
+    private final PhamacistOpinionService phamacistOpinionService;
     //   todo: @GetMapping("/phamacistOpinion/{memberId}")
     @GetMapping("/phamacistOpinion/list")
-//    @ResponseBody
     public String list(Model model) {
-        List<PhamacistOpinion> phamacistOpinionList = this.phamacistOpinionRepository.findAll();
+        List<PhamacistOpinion> phamacistOpinionList = this.phamacistOpinionService.getList();
         model.addAttribute("phamacistOpinionList", phamacistOpinionList);
         return "phamacist_opinion_list";
     }

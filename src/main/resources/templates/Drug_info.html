@@ -1,0 +1,14 @@
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>약 이름</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="drug : ${drugList}">
+        <td th:text="${drug.drugId}"></td>
+        <td th:text="${drug.drugName}"></td>
+    </tr>
+    </tbody>
+</table>

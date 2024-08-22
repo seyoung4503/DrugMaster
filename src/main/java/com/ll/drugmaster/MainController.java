@@ -13,8 +13,13 @@ public class MainController {
         return "index!";
     }
 
+    @GetMapping("/landing")
+    public String landingPage() {
+        return "landing";
+    }
+
     @GetMapping("/")
     public String root() {
-        return "redirect:/phamacistOpinion/list";
+        return "redirect:/landing";
     }
 }

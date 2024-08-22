@@ -23,6 +23,10 @@ public class Phamacist {
 
     private String password;
 
+//    // 약사 의견 삭제에도 모든 의견이 삭제됨
+//    @OneToMany(mappedBy = "phamacist", cascade = CascadeType.REMOVE)
+//    private List<PhamacistOpinion> phamacistOpinionList;
 
+    // todo : 약사들 MemberDrug 테이블 조회, opinion 작성 기능
 
 }

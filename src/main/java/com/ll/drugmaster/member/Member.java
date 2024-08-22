@@ -1,10 +1,15 @@
 package com.ll.drugmaster.member;
 
+import com.ll.drugmaster.MemberDrug.MemberDrug;
 import com.ll.drugmaster.phamacistOpinion.PhamacistOpinion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,8 +30,11 @@ public class Member {
     private String password;
 
     // 의사 소견
-    @OneToOne(mappedBy = "member")
-    private PhamacistOpinion phamacistOpinion;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<PhamacistOpinion> phamacistOpinionList;
 
+    // 복용 약 정보
+    @OneToMany(mappedBy = "member")
+    private Set<MemberDrug> memberDrugs = new HashSet<>();
 
 }
