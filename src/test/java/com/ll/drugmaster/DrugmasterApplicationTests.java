@@ -2,8 +2,12 @@ package com.ll.drugmaster;
 
 import com.ll.drugmaster.MemberDrug.MemberDrug;
 import com.ll.drugmaster.MemberDrug.MemberDrugRepository;
+import com.ll.drugmaster.counsel.Counsel;
+import com.ll.drugmaster.counsel.CounselRepository;
+import com.ll.drugmaster.counsel.CounselService;
 import com.ll.drugmaster.drug.Drug;
 import com.ll.drugmaster.drug.DrugRepository;
+import com.ll.drugmaster.drug.DrugService;
 import com.ll.drugmaster.member.Member;
 import com.ll.drugmaster.member.MemberRepository;
 import com.ll.drugmaster.phamacist.Phamacist;
@@ -36,6 +40,9 @@ class DrugmasterApplicationTests {
 
 	@Autowired
 	private MemberDrugRepository memberDrugRepository;
+
+	@Autowired
+	private CounselRepository counselRepository;
 
 	@Test
 	void contextLoads() {
@@ -161,6 +168,39 @@ class DrugmasterApplicationTests {
 		this.phamacistOpinionRepository.save(po2);
 
 
+	}
+
+	@Test
+	void testCounsel() {
+		Counsel counsel1 = new Counsel();
+		counsel1.setSubject("안정화씨 상담일지");
+		counsel1.setContent("a정 5알 b정 7알");
+
+		Optional<Member> om = this.memberRepository.findById(2L);
+		assertTrue(om.isPresent());
+
+		Member m1 = om.get();
+
+		counsel1.setMember(m1);
+
+		counsel1.setCreateDate(LocalDateTime.now());
+		this.counselRepository.save(counsel1);
+	}
+
+	@Autowired
+	private CounselService counselService;
+
+	@Autowired
+	private DrugService drugService;
+
+	@Test
+	void testJpa3() {
+		for (int i = 1; i <= 300; i++) {
+			String drugName = String.format("[%03d]", i);
+			String subject = String.format("테스트 데이터입니다:[%03d]", i);
+			String content = "내용무";
+			this.drugService.create(drugName, subject, content);
+		}
 	}
 
 }

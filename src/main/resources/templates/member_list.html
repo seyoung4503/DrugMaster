@@ -16,7 +16,13 @@
     <td th:text="${member.memberAge}"></td>
     <td th:text="${member.memberEmail}"></td>
     <td th:text="${member.password}"></td>
-    <td th:text="${member.phamacistOpinion}"></td>
+<!--    <td th:text="${member.phamacistOpinion}"></td>-->
+    <td>
+      <ul>
+        <li th:each="opinion : ${member.phamacistOpinionList}"
+            th:text="${opinion.content}">Opinion</li> <!-- Assuming opinion has a 'content' field -->
+      </ul>
+    </td>
   </tr>
   </tbody>
 </table>

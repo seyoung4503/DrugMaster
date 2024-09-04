@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container my-3">
+        <h2>마이페이지</h2>
+        <div class="card">
+            <div class="card-header">
+                <h4>회원 정보</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>사용자 이름:</strong> <span th:text="${member.memberName}"></span></p>
+                <p><strong>나이:</strong> <span th:text="${member.memberAge}"></span></p>
+                <p><strong>이메일:</strong> <span th:text="${member.memberEmail}"></span></p>
+                <p><strong>약사 여부:</strong> <span th:text="${member.isPhamacist != null ? (member.isPhamacist ? '약사' : '일반 사용자') : '정보 없음'}"></span>
+                </p>
+
+<!--                <h4>나의 약사 소견</h4>-->
+<!--                <ul>-->
+<!--                    <li th:each="opinion : ${member.phamacistOpinionList}">-->
+<!--                        <span th:text="${opinion.subject}"></span> - <span th:text="${#temporals.format(opinion.createDate, 'yyyy-MM-dd HH:mm')}"></span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--                <li th:each="opinion, iterStat  : ${member.phamacistOpinionList}">-->
+<!--                    <a th:href="@{|/counsel/detail/${opinion.counsel.id}|}" >-->
+<!--                    <span class="content-preview" th:text="${opinion.content}">Subject</span> - -->
+<!--                    <span th:text="${#temporals.format(opinion.createDate, 'yyyy-MM-dd HH:mm')}">Date</span>-->
+<!--                    </a>-->
+<!--&lt;!&ndash;                    <a th:if="${opinion.member.memberId == ${#authentication.principal.memberId}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                       th:href="@{|/counsel/detail/${opinion.counsel.id}|}"&ndash;&gt;-->
+<!--&lt;!&ndash;                       class="content-preview">상세보기</a>&ndash;&gt;-->
+<!--                </li>-->
+<!--                    <li th:each="opinion, iterStat : ${member.phamacistOpinionList}">-->
+<!--                        &lt;!&ndash; 로그인된 사용자의 ID와 글의 작성자 ID를 비교하여 조건부로 링크를 표시 &ndash;&gt;-->
+<!--                        <div th:if="${opinion.member.memberName == #authentication.principal.username}">-->
+<!--                            <a th:href="@{|/counsel/detail/${opinion.counsel.id}|}" class="content-preview">-->
+<!--                                <span th:text="${#strings.substringBefore(opinion.content, '\n')}">Subject</span> - -->
+<!--                                <span class="date" th:text="${#temporals.format(opinion.createDate, 'yyyy-MM-dd HH:mm')}">Date</span>-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                소견 첫 줄만 표기-->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const elements = document.querySelectorAll('.content-preview');
+                        elements.forEach(element => {
+                            const content = element.textContent;
+                            const firstLine = content.split('\n')[0];
+                            element.textContent = firstLine;
+                        });
+                    });
+                </script>
+
+<!--                <h4>복용 약 정보</h4>-->
+<!--                <ul>-->
+<!--                    <li th:each="drug : ${member.memberDrugs}">-->
+<!--                        <span th:text="${drug.drugName}"></span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
+

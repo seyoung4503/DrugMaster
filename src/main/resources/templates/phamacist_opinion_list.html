@@ -9,10 +9,13 @@
     </thead>
     <tbody>
     <tr th:each="phamacistOpinion : ${phamacistOpinionList}">
-        <td th:text="${phamacistOpinion.subject}"></td>
+        <td>
+            <a th:href="@{|/phamacistOpinion/detail/${phamacistOpinion.PhamOpinionId}|}"  th:text="${phamacistOpinion.subject}"></a>
+        </td>
         <td th:text="${phamacistOpinion.content}"></td>
         <td th:text="${phamacistOpinion.member}"></td>
         <td th:text="${phamacistOpinion.createDate}"></td>
+
     </tr>
     </tbody>
 </table>

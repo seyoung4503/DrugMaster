@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 약물 정보 분석</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        #new-drug-info {
+            border: 2px solid red; /* 테두리 색상을 빨간색으로 설정 */
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+        .search-container {
+            width: 80%;
+            display: flex;
+            justify-content: center;
+        }
+        .search-input {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .panel {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .upload-area,
+        .drug-input-area {
+            text-align: left;
+            border-radius: 20px;
+            padding: 20px;
+        }
+        .user-greeting-box {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .user-greeting {
+            text-align: left;
+            font-size: 18px;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .view-button {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .view-button:hover {
+            background-color: #218838;
+        }
+        .upload-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            cursor: pointer;
+            justify-content: flex-end;
+        }
+        .upload-container input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+        }
+        .upload-btn {
+            padding: 12px 24px;
+            background-color: #007bff; /* 보라색 */
+            color: white;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+        .upload-btn:hover {
+            background-color: #218838; /* 초록색으로 변경 */
+        }
+        .upload-icon {
+            margin-right: 8px;
+            font-size: 18px;
+            vertical-align: middle;
+        }
+        .drug-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            margin-right: 210px;
+        }
+        .drug-input:focus {
+            outline: none;
+            border-color: #218838;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+        .drug-input-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .drug-input-button:hover {
+            background-color: #218838;
+        }
+        .drug-input-button:active {
+            background-color: #004494;
+        }
+        .example-image {
+            width: 300px; /* 원하는 너비로 설정 */
+            height: auto; /* 이미지 비율을 유지하면서 높이를 자동 조절 */
+            border-radius: 10px; /* 선택적으로 모서리를 둥글게 만들 수 있음 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 선택적으로 그림자 추가 */
+            margin-bottom: 10px;
+        }
+        .example-image-container {
+            display: flex;
+            justify-content: center; /* 이미지를 가운데 정렬 */
+            margin-bottom: 20px; /* 이미지와 버튼 사이의 공간 추가 */
+        }
+        .drug-info-box {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .drug-info-box h1 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .drug-info-box p {
+            font-size: 16px;
+            color: #555;
+        }
+        .drug-info {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .drug-info-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .drug-info-header h2 {
+            font-size: 18px;
+            margin: 0;
+            color: #333;
+        }
+        .drug-info-date {
+            font-size: 14px;
+            color: #888;
+        }
+        .drug-info-body p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #444;
+        }
+        .drug-info-body strong {
+            color: #333;
+        }
+        /* 기본적으로 요소를 숨김 */
+        .invisible {
+            display: none;
+        }
+
+        /* 요소를 보이게 하는 스타일 (기본적으로 이 스타일을 사용하지 않음) */
+        .visible {
+            display: block;
+        }
+        @media (min-width: 768px) {
+            .main-container {
+                flex-direction: row;
+            }
+            .left-panel,
+            .right-panel {
+                flex: 1;
+            }
+        }
+
+        /*body {*/
+        /*    font-family: Arial, sans-serif;*/
+        /*    margin: 0;*/
+        /*    padding: 20px;*/
+        /*    box-sizing: border-box;*/
+        /*    display: flex;*/
+        /*    flex-direction: column;*/
+        /*    align-items: center;*/
+        /*    background-color: #f8f9fa;*/
+        /*    min-height: 100vh;*/
+        /*}*/
+        /*header {*/
+        /*    width: 100%;*/
+        /*    display: flex;*/
+        /*    justify-content: center;*/
+        /*    margin-bottom: 40px;*/
+        /*    margin-top: 20px;*/
+        /*}*/
+        /*.search-container {*/
+        /*    width: 80%;*/
+        /*    display: flex;*/
+        /*    justify-content: center;*/
+        /*}*/
+        /*.search-input {*/
+        /*    width: 100%;*/
+        /*    max-width: 600px;*/
+        /*    padding: 10px;*/
+        /*    font-size: 16px;*/
+        /*    border-radius: 20px;*/
+        /*    border: 1px solid #ccc;*/
+        /*}*/
+        /*.main-container {*/
+        /*    display: flex;*/
+        /*    flex-direction: column;*/
+        /*    gap: 20px;*/
+        /*    width: 100%;*/
+        /*    max-width: 1200px;*/
+        /*}*/
+        /*.panel {*/
+        /*    border: 2px solid #ccc;*/
+        /*    padding: 20px;*/
+        /*    border-radius: 8px;*/
+        /*    background-color: #fff;*/
+        /*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+        /*    margin-bottom: 20px;*/
+        /*}*/
+        /*.left-panel {*/
+        /*    display: flex;*/
+        /*    flex-direction: column;*/
+        /*    gap: 20px;*/
+        /*}*/
+        /*.upload-area,*/
+        /*.drug-input-area {*/
+        /*    text-align: left;*/
+        /*    border-radius: 20px;*/
+        /*    padding: 20px;*/
+        /*}*/
+        /*.user-greeting-box*/
+        /*!*.button-group-box,*!*/
+        /*!*.drug-info-box *!*/
+        /*{*/
+        /*    padding: 20px;*/
+        /*    background-color: #ffffff;*/
+        /*    border-radius: 20px;*/
+        /*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+        /*    margin-bottom: 20px;*/
+
+        /*}*/
+        /*.user-greeting {*/
+        /*    text-align: left;*/
+        /*    font-size: 18px;*/
+        /*    color: #333;*/
+        /*}*/
+        /*.button-group {*/
+        /*    display: flex;*/
+        /*    justify-content: space-between;*/
+        /*    gap: 10px;*/
+        /*    margin-bottom: 20px;*/
+        /*}*/
+        /*.view-button {*/
+        /*    flex: 1;*/
+        /*    padding: 10px;*/
+        /*    font-size: 16px;*/
+        /*    border: none;*/
+        /*    border-radius: 20px;*/
+        /*    background-color: #007bff;*/
+        /*    color: white;*/
+        /*    cursor: pointer;*/
+        /*}*/
+        /*.view-button:hover {*/
+        /*    background-color: #218838;*/
+        /*}*/
+        /*!*.drug-info-box h3 {*!*/
+        /*!*    margin-bottom: 15px;*!*/
+        /*!*    color: #333;*!*/
+        /*!*}*!*/
+        /*!*.drug-info {*!*/
+        /*!*    border: 1px solid #ccc;*!*/
+        /*!*    padding: 10px;*!*/
+        /*!*    margin: 5px 0;*!*/
+        /*!*    border-radius: 5px;*!*/
+        /*!*    background-color: #f1f1f1;*!*/
+        /*!*}*!*/
+        /*.upload-container {*/
+        /*    position: relative;*/
+        /*    display: inline-block;*/
+        /*    overflow: hidden;*/
+        /*    cursor: pointer;*/
+        /*    justify-content: flex-end;*/
+
+        /*}*/
+        /*.upload-container input[type="file"] {*/
+        /*    position: absolute;*/
+        /*    left: 0;*/
+        /*    top: 0;*/
+        /*    opacity: 0;*/
+        /*    cursor: pointer;*/
+        /*    height: 100%;*/
+        /*    width: 100%;*/
+        /*}*/
+        /*.upload-btn {*/
+        /*    padding: 12px 24px;*/
+        /*    background-color: #007bff;*/
+        /*    color: white;*/
+        /*    border-radius: 30px;*/
+        /*    font-size: 16px;*/
+        /*    font-weight: bold;*/
+        /*    border: none;*/
+        /*    cursor: pointer;*/
+        /*    transition: background-color 0.3s ease;*/
+        /*    text-align: center;*/
+        /*}*/
+        /*.upload-btn:hover {*/
+        /*    background-color: #218838;*/
+        /*}*/
+        /*.upload-icon {*/
+        /*    margin-right: 8px;*/
+        /*    font-size: 18px;*/
+        /*    vertical-align: middle;*/
+        /*}*/
+        /*.drug-input {*/
+        /*    flex: 1;*/
+        /*    padding: 10px;*/
+        /*    font-size: 16px;*/
+        /*    border-radius: 30px;*/
+        /*    border: 1px solid #ccc;*/
+        /*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+        /*    transition: border-color 0.3s ease, box-shadow 0.3s ease;*/
+        /*    margin-right: 210px;*/
+        /*}*/
+        /*.drug-input:focus {*/
+        /*    outline: none;*/
+        /*    border-color: #218838;*/
+        /*    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);*/
+        /*}*/
+        /*.drug-input-button {*/
+        /*    padding: 10px 20px;*/
+        /*    font-size: 16px;*/
+        /*    background-color: #007bff;*/
+        /*    color: white;*/
+        /*    border: none;*/
+        /*    border-radius: 30px;*/
+        /*    cursor: pointer;*/
+        /*    transition: background-color 0.3s ease;*/
+        /*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+        /*}*/
+        /*.drug-input-button:hover {*/
+        /*    background-color: #218838;*/
+        /*}*/
+        /*.drug-input-button:active {*/
+        /*    background-color: #004494;*/
+        /*}*/
+        /*.example-image {*/
+        /*    width: 300px; !* 원하는 너비로 설정 *!*/
+        /*    height: auto; !* 이미지 비율을 유지하면서 높이를 자동 조절 *!*/
+        /*    border-radius: 10px; !* 선택적으로 모서리를 둥글게 만들 수 있음 *!*/
+        /*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); !* 선택적으로 그림자 추가 *!*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+        /*.example-image-container {*/
+        /*    display: flex;*/
+        /*    justify-content: center; !* 이미지를 가운데 정렬 *!*/
+        /*    margin-bottom: 20px; !* 이미지와 버튼 사이의 공간 추가 *!*/
+        /*}*/
+        /*.drug-info-box {*/
+        /*    padding: 20px;*/
+        /*    background-color: #ffffff;*/
+        /*    border-radius: 20px;*/
+        /*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+        /*    margin-bottom: 20px;*/
+        /*}*/
+
+        /*.drug-info-box h1 {*/
+        /*    margin-bottom: 15px;*/
+        /*    color: #333;*/
+        /*}*/
+
+        /*.drug-info-box p {*/
+        /*    font-size: 16px;*/
+        /*    color: #555;*/
+        /*}*/
+
+        /*.drug-info {*/
+        /*    border: 1px solid #ddd;*/
+        /*    border-radius: 10px;*/
+        /*    margin-bottom: 15px;*/
+        /*    padding: 15px;*/
+        /*    background-color: #f9f9f9;*/
+        /*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);*/
+        /*}*/
+
+        /*.drug-info-header {*/
+        /*    display: flex;*/
+        /*    justify-content: space-between;*/
+        /*    margin-bottom: 10px;*/
+        /*    border-bottom: 1px solid #ddd;*/
+        /*    padding-bottom: 10px;*/
+        /*}*/
+
+        /*.drug-info-header h2 {*/
+        /*    font-size: 18px;*/
+        /*    margin: 0;*/
+        /*    color: #333;*/
+        /*}*/
+
+        /*.drug-info-date {*/
+        /*    font-size: 14px;*/
+        /*    color: #888;*/
+        /*}*/
+
+        /*.drug-info-body p {*/
+        /*    margin: 5px 0;*/
+        /*    font-size: 16px;*/
+        /*    color: #444;*/
+        /*}*/
+
+        /*.drug-info-body strong {*/
+        /*    color: #333;*/
+        /*}*/
+
+        /*@media (min-width: 768px) {*/
+        /*    .main-container {*/
+        /*        flex-direction: row;*/
+        /*    }*/
+        /*    .left-panel,*/
+        /*    .right-panel {*/
+        /*        flex: 1;*/
+        /*    }*/
+        /*}*/
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="검색어를 입력하세요">
+    </div>
+</header>
+<div class="main-container">
+    <div class="left-panel">
+        <div class="panel upload-area">
+            <h1>AI 약물 정보 분석</h1>
+            <p>약 사진을 업로드 하세요</p>
+
+            <div class="example-image-container">
+
+                <!--                drugmaster/src/main/resources/static/drug_example.jpg-->
+                <!--                <img src="/images/drug_example.jpg" alt="예시 이미지" class="example-image">-->
+                <img id="example-image" src="/images/drug_example.jpg" alt="예시 이미지" class="example-image">
+            </div>
+
+
+            <div class="upload-container">
+                <button class="upload-btn" id="uploadButton">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    사진 업로드
+                </button>
+                <!--                <input type="file" accept="image/*">-->
+                <input type="file" id="fileInput" class="hidden-input" accept="image/*">
+            </div>
+
+        </div>
+        <script>
+            document.getElementById('uploadButton').addEventListener('click', function() {
+                document.getElementById('fileInput').click(); // File input 클릭
+            });
+
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                var file = event.target.files[0]; // 선택한 파일
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('example-image').src = e.target.result; // 이미지 변경
+                    };
+                    reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+                }
+            });
+        </script>
+
+        <div class="panel drug-input-area">
+            <h1>약물 정보 입력란</h1>
+            <input type="text" placeholder="약물 이름을 입력하세요" class="drug-input">
+            <button class="drug-input-button">약물 정보 입력</button>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="panel user-greeting-box">
+            <div class="user-greeting">
+                <h1> 홍길동 님 </h1>
+                환영합니다.
+            </div>
+        </div>
+        <div class="button-group">
+            <button class="view-button" id="viewAdviceButton">약사 소견 보기</button>
+            <button class="view-button" id="viewAnalysisButton">약물 분석 확인</button>
+        </div>
+
+        <!--        <div class="panel button-group-box">-->
+        <!--            <div class="button-group">-->
+        <!--                <button class="view-button">약사 소견 보기</button>-->
+        <!--                <button class="view-button">약물 분석 확인</button>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <!--        <div class="panel drug-info-box">-->
+        <!--            <h1>약물 정보 보기</h1>-->
+        <!--            <p>홍길동 님은 현재 a, b, c 약물을 복용중입니다. </p>-->
+        <!--            <div class="drug-info">A 약물 정보</div>-->
+        <!--            <div class="drug-info">B 약물 정보</div>-->
+        <!--            <div class="drug-info">C 약물 정보</div>-->
+        <!--        </div>-->
+        <div class="panel drug-info-box">
+            <h1>약물 정보 보기</h1>
+            <p>홍길동 님은 현재 다음 약물을 복용 중입니다:</p>
+            <div class="drug-info invisible" id="new-drug-info">
+                <div class="drug-info-header" >
+                    <h2>듀오스타정</h2>
+                    <span class="drug-info-date">2024년 8월 26일</span>
+                </div>
+                <div class="drug-info-body">
+                    <p><strong>용도:</strong> 고혈압 복합 치료</p>
+                    <p><strong>복용법:</strong> 1일 1정 복용</p>
+                    <p><strong>충돌 가능성:</strong> 주의 : 세바코에이치씨티정과 충돌할 수 있습니다. <br>
+                        약사와 상담 후 복용하시길 바랍니다.</p>
+                </div>
+            </div>
+            <div class="drug-info invisible" id="new-drug-info2">
+                <div class="drug-info-header" >
+                    <h2>멀티큐텐플러스정</h2>
+                    <span class="drug-info-date">2024년 8월 26일</span>
+                </div>
+                <div class="drug-info-body">
+                    <p><strong>용도:</strong> 비타민제</p>
+                    <p><strong>복용법:</strong> 1일 1정 복용</p>
+                </div>
+            </div>
+            <div class="drug-info">
+                <div class="drug-info-header">
+                    <h2>경동파니틴정</h2>
+                    <span class="drug-info-date">2024년 8월 25일</span>
+                </div>
+                <div class="drug-info-body">
+                    <p><strong>용도:</strong> 소화성 궤양 치료</p>
+                    <p><strong>복용법:</strong> 1회 2정 복용</p>
+                </div>
+            </div>
+            <div class="drug-info">
+                <div class="drug-info-header">
+                    <h2>세바코에이치씨티정</h2>
+                    <span class="drug-info-date">2024년 8월 20일</span>
+                </div>
+                <div class="drug-info-body">
+                    <p><strong>용도:</strong> 고혈압 치료</p>
+                    <p><strong>복용법:</strong> 1일 1회 1정</p>
+                    <p><strong>부작용:</strong> 드물게 약물 과민 반응</p>
+                </div>
+            </div>
+            <div class="drug-info">
+                <div class="drug-info-header">
+                    <h2>게스타렌투엑스정</h2>
+                    <span class="drug-info-date">2024년 8월 15일</span>
+                </div>
+                <div class="drug-info-body">
+                    <p><strong>용도:</strong> 급성 위염 개선</p>
+                    <p><strong>복용법:</strong> 1일 2회 식후 경구투여</p>
+                    <p><strong>부작용:</strong> 복부팽만, 소화불량</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('viewAdviceButton').addEventListener('click', function() {
+                window.location.href = '/counsel/list'; // '약사 소견 보기' 링크로 이동
+            });
+
+            document.getElementById('viewAnalysisButton').addEventListener('click', function() {
+                document.getElementById('example-image').src = '/images/val3_done.png'; // 이미지 변경
+                var newDrugInfo = document.getElementById('new-drug-info');
+                // `invisible` 클래스를 제거하고 `visible` 클래스를 추가하여 보이게 함
+                newDrugInfo.classList.remove('invisible');
+                newDrugInfo.classList.add('visible');
+
+                var newDrugInfo2 = document.getElementById('new-drug-info2');
+                // `invisible` 클래스를 제거하고 `visible` 클래스를 추가하여 보이게 함
+                newDrugInfo2.classList.remove('invisible');
+                newDrugInfo2.classList.add('visible');
+            });
+
+        </script>
+    </div>
+</div>
+
+</body>
+</html>

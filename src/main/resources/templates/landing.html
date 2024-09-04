@@ -1,28 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
 <head>
   <meta charset="UTF-8">
-  <title>4등분 화면</title>
-  <link rel="stylesheet" href="/styles.css">
+  <title>Drug Master</title>
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 두 개의 열로 나누기 */
+      grid-template-rows: 1fr 1fr;    /* 두 개의 행으로 나누기 */
+      height: 100vh; /* 화면 전체 높이 */
+    }
+
+    .grid-item {
+      border: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      color: whitesmoke;
+    }
+    .item1 {
+      background-color: #FF5733; /* 빨간색 */
+    }
+
+    .item2 {
+      background-color: #33C1FF; /* 파란색 */
+    }
+
+    .item3 {
+      background-color: #75FF33; /* 초록색 */
+    }
+
+    .item4 {
+      background-color: #FFC133; /* 노란색 */
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="box box1">
-    <h2>상단 왼쪽</h2>
-    <p>여기에 상단 왼쪽 내용이 들어갑니다.</p>
+<th:block layout:fragment="content">
+<!--<tr th:each="phamacistOpinion : ${phamacistOpinion}">-->
+  <div class="grid-container">
+  <!--  todo : 사진 분석 링크-->
+    <div class="grid-item item1" onclick="window.location.href='/counsel/create';">
+        약물 분석
+    </div>
+
+  <!--  todo : 마이페이지, 로그인 되어 있을 때는 mypage, 그렇지 않은 경우에는 login 페이지로 이동 -->
+      <div class="grid-item item2" onclick="window.location.href='/mypage';">
+          마이페이지
+      </div>
+
+  <!--  todo : 약물 정보 검색 페이지 -->
+<!--    counsel_list 페이지로 이동 (전체 약사 조언 보기 페이지)-->
+    <div class="grid-item item3" onclick="window.location.href='/counsel/list';">
+      약물 정보 검색
+    </div>
+  <!--todo : 약사 소견 확인 페이지 추가 https://wikidocs.net/161302 참고 (완성 O)-->
+    <!--    (나의 약사 조언 보기 페이지로 이동)-->
+    <div class="grid-item item4" onclick='window.location.href="/counsel/list";'>
+<!--    <div class="grid-item item4" th:onclick='window.location.href="/@{|/phamacistOpinion/detail/${phamacistOpinion.PhamOpinionId}|}";'>-->
+  <!--    <a th:href="@{|/phamacistOpinion/detail/${phamacistOpinion.PhamOpinionId}|}" th:text="${phamacistOpinion.subject}"></a>-->
+<!--        landing에서 넘어가야 하기에 phamacistOpinion를 넘겨줘야 함-->
+        약사 소견 확인
+    </div>
   </div>
-  <div class="box box2">
-    <h2>상단 오른쪽</h2>
-    <p>여기에 상단 오른쪽 내용이 들어갑니다.</p>
-  </div>
-  <div class="box box3">
-    <h2>하단 왼쪽</h2>
-    <p>여기에 하단 왼쪽 내용이 들어갑니다.</p>
-  </div>
-  <div class="box box4">
-    <h2>하단 오른쪽</h2>
-    <p>여기에 하단 오른쪽 내용이 들어갑니다.</p>
-  </div>
-</div>
+<!--</tr>-->
+</th:block>
 </body>
 </html>

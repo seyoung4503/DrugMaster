@@ -1,0 +1,12 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content"  class="container my-3">
+    <!-- 약 이름 -->
+    <h2 class="border-bottom py-2" th:text="${drug.drugName}"></h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${drug.content}"></div>
+        </div>
+    </div>
+
+</div>
+</html>

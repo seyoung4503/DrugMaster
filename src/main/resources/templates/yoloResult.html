@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>YOLO Detection Result</title>
+</head>
+<body>
+<h1>YOLO Detection Result</h1>
+
+<div th:if="${status == 'success'}">
+  <h2>Detection Success</h2>
+  <p th:text="'Result: ' + ${result}"></p>
+</div>
+<div th:unless="${status == 'success'}">
+  <h2>Error</h2>
+  <p th:text="'Error message: ' + ${message}"></p>
+</div>
+</body>
+</html>

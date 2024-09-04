@@ -16,7 +16,16 @@ public class Drug {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long drugId;
 
+    @Column(length = 200, unique = true)
     private String drugName;
+
+    @Column(length = 200, unique = true)
+    private String subject;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    private String imgUrl;
 
     // 환자 별 복용약 정보 테이블
     @OneToMany(mappedBy = "drug")

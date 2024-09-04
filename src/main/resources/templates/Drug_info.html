@@ -1,14 +1,45 @@
-<table>
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>약 이름</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="drug : ${drugList}">
-        <td th:text="${drug.drugId}"></td>
-        <td th:text="${drug.drugName}"></td>
-    </tr>
-    </tbody>
-</table>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>약 이름</th>
+            <th>subject</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="drug, loop : ${paging}">
+            <td th:text="${loop.count}"></td>
+            <td >
+                <a th:href="@{|/drug/detail/${drug.drugId}|}" th:text="${drug.drugName}"> </a>
+            </td>
+            <td th:text="${drug.subject}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+    <a th:href="@{/drug/create}" class="btn btn-primary">약물 등록하기</a>
+</div>
+</html>

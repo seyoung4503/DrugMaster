@@ -1,5 +1,6 @@
 package com.ll.drugmaster.phamacistOpinion;
 
+import com.ll.drugmaster.counsel.Counsel;
 import com.ll.drugmaster.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +27,9 @@ public class PhamacistOpinion {
 
     @ManyToOne
     private Member member;
+
+    @ManyToOne
+    private Counsel counsel;
 
 //    @ManyToOne
 //    private Phamacist phamacist;
